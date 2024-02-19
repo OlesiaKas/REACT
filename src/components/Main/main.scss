@@ -1,0 +1,15 @@
+.main {
+  &-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    max-width: 930px;
+    margin: 0 auto;
+  }
+  &-action-btn {
+    width: 100%;
+  }
+  &-action-btn2 {
+    width: 100%;
+  }
+}
