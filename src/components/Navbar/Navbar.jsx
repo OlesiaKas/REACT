@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+// componentai
+import User from "../User/User";
 import "./navbar.scss";
 function Navbar() {
   return (
@@ -16,6 +18,7 @@ function Navbar() {
           <NavLink to="/favorites"> Favorites</NavLink>
         </li>
       </ul>
+      <User />
     </nav>
   );
 }
