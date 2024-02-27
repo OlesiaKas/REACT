@@ -14,7 +14,7 @@ const Button = ({ children, type, onClick }) => {
 
   return (
     <button onClick={onClick} className={styles}>
-      <span>{children}</span> <i />
+      <span title="buttonSpan">{children}</span> <i />
     </button>
   );
 };

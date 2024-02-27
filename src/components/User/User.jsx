@@ -13,7 +13,7 @@ function User() {
       setLoading(true);
       try {
         const response = await fetch(
-          "https://jsonplaceholder.typicode.com/users/1"
+          "https://jsonplaceholder.typicode.com/users/2"
         );
         if (!response.ok) throw new Error("Something went wrong");
 
