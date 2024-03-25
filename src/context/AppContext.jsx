@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect } from "react";
-
+import { cfg } from "../cfg/cfg";
 export const AppContext = createContext();
 
 function AppContextProvider(props) {
@@ -13,7 +13,7 @@ function AppContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/product");
+        const response = await fetch(`${cfg.API.HOST}/product`);
         console.log("response", response);
 
         const products = await response.json();
@@ -21,7 +21,7 @@ function AppContextProvider(props) {
         const filteredData = products.filter(
           (item) => !cardData.some((cardItem) => cardItem.title === item.title)
         );
-        setData(products);
+        setData(filteredData);
       } catch (error) {}
     };
     fetchData();
