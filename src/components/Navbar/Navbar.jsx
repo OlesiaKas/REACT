@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 // componentai
 import User from "../User/User";
+import AdminUser from "../AdminUser/AdminUser";
 import "./navbar.scss";
 function Navbar() {
   return (
@@ -17,8 +18,12 @@ function Navbar() {
         <li>
           <NavLink to="/favorites"> Favorites</NavLink>
         </li>
+        <li>
+          <NavLink to="/admin"> Admin</NavLink>
+        </li>
       </ul>
       <User />
+      <AdminUser />
     </nav>
   );
 }
