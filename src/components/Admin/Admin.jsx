@@ -8,6 +8,7 @@ import {
   Spinner,
   Alert,
 } from "react-bootstrap";
+import useAuth from "../../hooks/useAuth";
 import { cfg } from "../../cfg/cfg";
 
 function Admin() {
@@ -20,6 +21,8 @@ function Admin() {
     value: null, //'success', 'errror'
     message: "",
   });
+
+  const { token } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,6 +49,7 @@ function Admin() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });

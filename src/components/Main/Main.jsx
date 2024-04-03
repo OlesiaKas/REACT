@@ -29,6 +29,7 @@ function Main() {
           }}
         />
       </div>
+      {!data.lenght && <h2>There is no items in the shop..</h2>}
       {data
         .filter(
           ({ title, description }) =>
