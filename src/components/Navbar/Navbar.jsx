@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 // componentai
-import User from "../User/User";
+//import User from "../User/User";
 import AdminUser from "../AdminUser/AdminUser";
 import "./navbar.scss";
 function Navbar() {

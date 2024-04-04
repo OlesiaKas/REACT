@@ -1,14 +1,8 @@
-import React, { useState } from "react";
-import {
-  Form,
-  Col,
-  Row,
-  Container,
-  Button,
-  Spinner,
-  Alert,
-} from "react-bootstrap";
+import React, { useState, useContext } from "react";
+import { Form, Col, Row, Container, Spinner, Alert } from "react-bootstrap";
+import Button from "../Button/Button";
 import useAuth from "../../hooks/useAuth";
+import { AppContext } from "../../context/AppContext";
 import { cfg } from "../../cfg/cfg";
 
 function Admin() {
@@ -18,11 +12,12 @@ function Admin() {
   const [description, setDescription] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [status, setStatus] = useState({
-    value: null, //'success', 'errror'
+    value: null, //'success', 'error'
     message: "",
   });
 
-  const { token } = useAuth();
+  const { token, setToken } = useAuth();
+  const { fetchData, setShowLogin } = useContext(AppContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -42,7 +37,6 @@ function Admin() {
       const data = {
         title,
         description,
-        img: imgUrl,
       };
       if (imgUrl.trim()) data.img = imgUrl;
       const response = await fetch(`${cfg.API.HOST}/product`, {
@@ -54,10 +48,22 @@ function Admin() {
         body: JSON.stringify(data),
       });
       const product = await response.json();
-      if (!response.ok) throw new Error(product.error);
+      console.log(response);
+      if (!response.ok) {
+        if (response.status === 401) {
+          setToken(null);
+          setShowLogin(true);
+          alert("You need to login again");
+        }
+
+        throw new Error(product.error);
+      }
+
       setStatus({ value: "success", message: "Product created successfully" });
+      fetchData();
       console.log(product);
     } catch (error) {
+      console.log(error);
       setStatus({
         value: "danger",
         message:
@@ -85,6 +91,9 @@ function Admin() {
                 onChange={(e) => setTitle(e.target.value)}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Title is required!
+              </Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row>
@@ -98,6 +107,9 @@ function Admin() {
                 onChange={(e) => setDescription(e.target.value)}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Description is required!
+              </Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row>
@@ -112,10 +124,10 @@ function Admin() {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
-          <Button type="submit" disabled={loading}>
-            {loading && <Spinner animation="border" variant="secondary" />}
+          <Button style={{ marginTop: "2rem" }} type="teal" disabled={loading}>
             Create product
           </Button>
+          {loading && <Spinner animation="border" variant="secondary" />}
         </Form>
       </Container>
     </main>

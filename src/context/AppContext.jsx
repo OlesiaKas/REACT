@@ -3,6 +3,8 @@ import { cfg } from "../cfg/cfg";
 export const AppContext = createContext();
 
 function AppContextProvider(props) {
+  const [showLogin, setShowLogin] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const [data, setData] = useState([]);
   const [cardData, setCardData] = useState(
     JSON.parse(localStorage.getItem("cardData")) || []
@@ -10,22 +12,30 @@ function AppContextProvider(props) {
   const [favoritesData, setFavoritesData] = useState(
     JSON.parse(localStorage.getItem("favoritesData")) || []
   );
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${cfg.API.HOST}/product`);
-        console.log("response", response);
 
-        const products = await response.json();
-        console.log("products", products);
-        const filteredData = products.filter(
-          (item) => !cardData.some((cardItem) => cardItem.title === item.title)
-        );
-        setData(filteredData);
-      } catch (error) {}
-    };
+  const fetchData = async () => {
+    try {
+      setLoadingProducts(true);
+      const response = await fetch(`${cfg.API.HOST}/product`);
+      console.log("response", response);
+
+      const products = await response.json();
+      console.log("products", products);
+      const filteredData = products.filter(
+        (item) => !cardData.some((cardItem) => cardItem.title === item.title)
+      );
+      setData(filteredData);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
+
   useEffect(() => {
     localStorage.setItem("cardData", JSON.stringify(cardData));
   }, [cardData]);
@@ -64,11 +74,15 @@ function AppContextProvider(props) {
         data,
         setData,
         cardData,
+        showLogin,
+        setShowLogin,
+        fetchData,
         setCardData,
         handleAddToCard,
         handleRemoveFromCard,
         favoritesData,
         setFavoritesData,
+        loadingProducts,
         handleAddToFavorites,
         handleRemoveFromFavorites,
       }}
